@@ -63,39 +63,34 @@ The following diagram illustrates how your career empire is forged. When you cli
 ```mermaid
 graph TD
 
-%% Styles
-classDef ui fill:#8B1D1D,stroke:#fee2e2,stroke-width:2px,color:#fff;
-classDef graph fill:#1E1E1E,stroke:#8B1D1D,stroke-width:2px,color:#eee;
-classDef db fill:#2A2A2A,stroke:#fee2e2,stroke-width:1px,color:#ddd;
-classDef service fill:#0f172a,stroke:#38bdf8,stroke-width:1px,color:#fff;
+    UI["Streamlit UI (app.py)"]
+    DB[("SQLite Database")]
 
-UI["Streamlit UI"]:::ui
-DB[("SQLite<br/>cvilization.db")]:::db
+    subgraph Pipeline["LangGraph Pipeline (agents/workflow.py)"]
+        direction TB
 
-subgraph Pipeline["LangGraph Pipeline"]
-    direction TB
+        A["Analyze JD"]
+        B["Optimize ATS"]
+        C["Generate LaTeX"]
+        D["Compile PDF"]
 
-    A["Analyze JD"]:::graph
-    B["Optimize ATS"]:::graph
-    C["Generate LaTeX"]:::graph
-    D["Compile PDF"]:::graph
+        A -->|Extract requirements| B
+        B -->|Optimize resume| C
+        C -->|Generate TeX| D
+    end
 
-    A -->|"Extract requirements"| B
-    B -->|"Optimize resume"| C
-    C -->|"Generate TeX"| D
-end
+    LLM["Gemini API"]
+    PDF["PDF Compiler"]
 
-LLM["Gemini API"]:::service
-PDF["pdflatex / FPDF"]:::service
-
-UI -->|"Submit JD & Profile"| A
-A <-->|"Load profile"| DB
-A -->|"Analyze JD"| LLM
-B -->|"ATS optimization"| LLM
-B -->|"Save history"| DB
-D -->|"Compile PDF"| PDF
-D -->|"Return PDF"| UI
+    UI -->|Submit JD & Profile| A
+    A <-->|Load profile| DB
+    A -->|Analyze JD| LLM
+    B -->|ATS optimization| LLM
+    B -->|Save history| DB
+    D -->|Compile PDF| PDF
+    D -->|Return PDF| UI
 ```
+
 ---
 
 ## Tech Stack & Key Libraries
