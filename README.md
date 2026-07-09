@@ -62,41 +62,40 @@ The following diagram illustrates how your career empire is forged. When you cli
 
 ```mermaid
 graph TD
-    %% Define Styles
+    %% Styles
     classDef ui fill:#8B1D1D,stroke:#fee2e2,stroke-width:2px,color:#fff;
     classDef graph fill:#1E1E1E,stroke:#8B1D1D,stroke-width:2px,color:#eee;
     classDef db fill:#2A2A2A,stroke:#fee2e2,stroke-width:1px,color:#ddd;
     classDef service fill:#0f172a,stroke:#38bdf8,stroke-width:1px,color:#fff;
 
     %% Components
-    UI[Streamlit UI app.py]:::ui
-    DB[(SQLite cvilization.db)]:::db
-    
-    subgraph LangGraph Pipeline [agents/workflow.py]
+    UI["Streamlit UI<br/>app.py"]:::ui
+    DB[("SQLite<br/>cvilization.db")]:::db
+
+    subgraph Pipeline["LangGraph Pipeline<br/>agents/workflow.py"]
         direction TB
-        NodeA[Analyze JD Node<br>agents/jd_analyzer.py]:::graph
-        NodeB[Optimize ATS Node<br>agents/ats_optimizer.py]:::graph
-        NodeC[Generate LaTeX Node<br>agents/latex_generator.py]:::graph
-        NodeD[Compile PDF Node<br>agents/pdf_compiler.py]:::graph
-        
-        NodeA -->|Extracts requirements| NodeB
-        NodeB -->|Toggles elements, matches profile| NodeC
-        NodeC -->|Translates to TeX source| NodeD
+
+        A["Analyze JD<br/>agents/jd_analyzer.py"]:::graph
+        B["Optimize ATS<br/>agents/ats_optimizer.py"]:::graph
+        C["Generate LaTeX<br/>agents/latex_generator.py"]:::graph
+        D["Compile PDF<br/>agents/pdf_compiler.py"]:::graph
+
+        A -->|"Extract requirements"| B
+        B -->|"Optimize resume"| C
+        C -->|"Generate TeX"| D
     end
-    
-    Gemini[Gemini API / LLM Service]:::service
-    PDF_Engine[pdflatex compiler / FPDF Fallback]:::service
 
-    %% Interactions
-    UI -->|1. Submit JD & Profile| NodeA
-    NodeA <-->|Query base profile| DB
-    NodeA -->|2. Send JD text| Gemini
-    NodeB -->|3. Compare Profile vs JD| Gemini
-    NodeB -->|4. Persist selections & update history| DB
-    NodeD -->|5. Render PDF| PDF_Engine
-    NodeD -->|6. Cache binary results| UI
+    LLM["Gemini API"]:::service
+    PDF["pdflatex / FPDF"]:::service
+
+    UI -->|"1. Submit JD & Profile"| A
+    A <-->|"Load profile"| DB
+    A -->|"2. Analyze JD"| LLM
+    B -->|"3. ATS optimization"| LLM
+    B -->|"4. Save history"| DB
+    D -->|"5. Compile PDF"| PDF
+    D -->|"6. Return PDF"| UI
 ```
-
 ---
 
 ## Tech Stack & Key Libraries
