@@ -3,7 +3,7 @@
 
 ![cvilization Hero Banner](cvilization_hero_banner.png)
 
-**[Project Demo](https://your-cvilization-link.com)**
+**[Project Demo](https://cvilization.streamlit.app)**
 
 Welcome to **cvilization**, the automated resume forge and career-empire architect. Because in the modern corporate colosseum, your resume shouldn't just list your achievements; it should aggressively conquer the Applicant Tracking System (ATS) and leave recruiters weeping tears of joy.
 
